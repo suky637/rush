@@ -1,0 +1,4 @@
+name: rush
+version: '${project.version}'
+main: qc.suky.rush.Rush
+api-version: '1.20'
