@@ -30,4 +30,46 @@ public class RushAdminCommand extends BaseCommand {
 		sender.sendMessage(Format.format("List: <green>%s", arenaNames));
 	}
 
+	@Subcommand("setLobby")
+	@CommandPermission("rush.admin")
+	private void onArenaSetLobby(CommandSender sender)
+	{
+
+	}
+
+	@Subcommand("addTeam")
+	@CommandPermission("rush.admin")
+	private void onArenaAddTeam(CommandSender sender)
+	{
+
+	}
+
+	@Subcommand("setTeamSpawn")
+	@CommandPermission("rush.admin")
+	private void onArenaSetTeamSpawn(CommandSender sender)
+	{
+
+	}
+
+	@Subcommand("addBronzeSpawner")
+	@CommandPermission("rush.admin")
+	private void onArenaAddBronzeSpawner(CommandSender sender)
+	{
+
+	}
+
+	@Subcommand("addSilverSpawner")
+	@CommandPermission("rush.admin")
+	private void onArenaAddSilverSpawner(CommandSender sender)
+	{
+
+	}
+
+	@Subcommand("addGoldSpawner")
+	@CommandPermission("rush.admin")
+	private void onArenaAddGoldSpawner(CommandSender sender)
+	{
+
+	}
+
 }

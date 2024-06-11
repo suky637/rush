@@ -28,6 +28,8 @@ public class RushArena {
 	private World bukkitWorld;
 	private final Rush plugin;
 
+
+
 	@Getter
 	private final List<Player> players = new ArrayList<>();
 

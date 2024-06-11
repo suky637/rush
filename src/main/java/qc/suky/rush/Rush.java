@@ -33,7 +33,7 @@ public final class Rush extends JavaPlugin {
 
 		getServer().getPluginManager().registerEvents(new HandleArena(this), this);
 		getServer().getPluginManager().registerEvents(new AppendPlayerAmount(this), this);
-		arenas.add(new RushArena(gameMapsFolder, "rush", true, this));
+		//arenas.add(new RushArena(gameMapsFolder, "rush", true, this));
 
 		commandManager.registerCommand(new RushCommand(this));
 		commandManager.registerCommand(new RushAdminCommand(this));

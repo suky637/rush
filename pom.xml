@@ -6,7 +6,7 @@
 
     <groupId>qc.suky</groupId>
     <artifactId>rush</artifactId>
-    <version>1.1-INDEV</version>
+    <version>P1.1</version>
     <packaging>jar</packaging>
 
     <name>rush</name>
@@ -33,7 +33,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
