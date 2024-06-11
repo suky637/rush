@@ -43,6 +43,14 @@ public class RushArena {
 		}
 	}
 
+	public World getBukkitWorld() {
+		if (!isLoaded()) {
+			plugin.getLogger().warning("Attempting to get Bukkit World from unloaded Rush Arena");
+			// Let's still try if it works...
+		}
+		return bukkitWorld;
+	}
+
 	public boolean load() {
 		if (isLoaded()) return true;
 
@@ -70,7 +78,7 @@ public class RushArena {
 		if (bukkitWorld != null) this.bukkitWorld.setAutoSave(false);
 
 		if (isLoaded()) {
-			RushCommand.update(bukkitWorld);
+			// update(bukkitWorld);
 			return true;
 		}
 		return isLoaded();

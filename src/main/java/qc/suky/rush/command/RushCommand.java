@@ -1,5 +1,12 @@
 package qc.suky.rush.command;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Subcommand;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -8,28 +15,24 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import qc.suky.rush.Format;
+import qc.suky.rush.Rush;
 
-public class RushCommand implements CommandExecutor {
+@CommandAlias("rush")
+@AllArgsConstructor
+public class RushCommand extends BaseCommand {
+	private final Rush plugin;
 
-
-	private static World arena;
-
-	public RushCommand() {
-
+	@Default
+	@CommandPermission("rush.use")
+	public void onDefault(CommandSender player) {
+		player.sendMessage(Format.format("<white>Not implemented yet!"));
 	}
 
-	public static void update(World world) {
-		arena = world;
-	}
-
-	@Override
-	public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-		if (commandSender.hasPermission("rush.use") && commandSender instanceof Player) {
-			Player player = (Player) commandSender;
-			Location loc = new Location(arena, 0, 65, 0);
-			player.teleport(loc);
-			player.sendMessage(Format.format("<green>Teleporting to the arena...</green>"));
-		}
-		return false;
+	@Subcommand("teleport")
+	@CommandPermission("rush.use")
+	public void onTeleport(Player player) {
+		Location loc = new Location(plugin.getArena().getBukkitWorld(), 0, 65, 0);
+		player.teleport(loc);
+		player.sendMessage(Format.format("<green>Teleporting to the arena...</green>"));
 	}
 }

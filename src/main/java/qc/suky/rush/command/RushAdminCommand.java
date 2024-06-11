@@ -1,20 +1,20 @@
 package qc.suky.rush.command;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import qc.suky.rush.Format;
 
-public class RushAdminCommand implements CommandExecutor {
+@CommandAlias("rush-admin")
+public class RushAdminCommand extends BaseCommand {
 
-	public RushAdminCommand() {
-
+	@Default
+	private void onDefault(CommandSender sender) {
+		sender.sendMessage(Format.format("<white>Not implemented yet!"));
 	}
 
-	@Override
-	public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-
-
-		return true;
-	}
 }
