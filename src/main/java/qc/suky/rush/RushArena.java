@@ -1,12 +1,10 @@
 package qc.suky.rush;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
-import org.bukkit.util.FileUtil;
-import org.codehaus.plexus.util.FileUtils;
+import qc.suky.rush.command.RushCommand;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,99 +15,93 @@ import static org.codehaus.plexus.util.FileUtils.copyDirectory;
 import static org.codehaus.plexus.util.FileUtils.copyFile;
 
 public class RushArena {
-    public RushArenaState status;
-    public List<Block> blocks = new ArrayList<>();
+	public RushArenaState status;
+	public List<Block> blocks = new ArrayList<>();
 
-    private final File sourceWorldFolder;
-    private File activeWorldFolder;
+	private final File sourceWorldFolder;
+	private File activeWorldFolder;
 
-    private World bukkitWorld;
+	private World bukkitWorld;
+	private final Rush plugin;
 
-    public RushArena(File worldFolder, String worldName, boolean loadOnInit)
-    {
-        this.sourceWorldFolder = new File(
-                worldFolder,
-                worldName
-        );
+	public RushArena(File worldFolder, String worldName, boolean loadOnInit, Rush plugin) {
+		this.sourceWorldFolder = new File(
+				worldFolder,
+				worldName
+		);
 
-        if (loadOnInit) load();
-    }
+		this.plugin = plugin;
 
-    public static void copyDirectoryCompatibityMode(File source, File destination) throws IOException {
-        if (source.isDirectory()) {
-            copyDirectory(source, destination);
-        } else {
-            copyFile(source, destination);
-        }
-    }
+		if (loadOnInit) load();
+	}
 
-    public boolean load() {
-        if (isLoaded()) return true;
+	public static void copyDirectoryCompatibityMode(File source, File destination) throws IOException {
+		if (source.isDirectory()) {
+			copyDirectory(source, destination);
+		} else {
+			copyFile(source, destination);
+		}
+	}
 
-        this.activeWorldFolder = new File(
-                Bukkit.getWorldContainer().getParentFile(),
-                sourceWorldFolder.getName() + "_active_" + System.currentTimeMillis()
-        );
+	public boolean load() {
+		if (isLoaded()) return true;
 
-        try {
-            if (!activeWorldFolder.exists())
-                activeWorldFolder.mkdir();
-            for (String f : sourceWorldFolder.list())
-            {
-                copyDirectoryCompatibityMode(new File(sourceWorldFolder, f), new File(activeWorldFolder, f));
-            }
-        } catch (Exception e) {
-            Bukkit.getLogger().severe("Failed to load Rush Map from source folder " + sourceWorldFolder);
-            e.printStackTrace();
-            return false;
-        }
+		this.activeWorldFolder = new File(
+				Bukkit.getWorldContainer().getParentFile(),
+				sourceWorldFolder.getName() + "_active_" + System.currentTimeMillis()
+		);
 
-        this.bukkitWorld = Bukkit.createWorld(
-                new WorldCreator(activeWorldFolder.getName())
-        );
+		try {
+			if (!activeWorldFolder.exists())
+				activeWorldFolder.mkdir();
+			for (String f : sourceWorldFolder.list()) {
+				copyDirectoryCompatibityMode(new File(sourceWorldFolder, f), new File(activeWorldFolder, f));
+			}
+		} catch (Exception e) {
+			plugin.getLogger().severe("Failed to load Rush Map from source folder " + sourceWorldFolder);
+			e.printStackTrace();
+			return false;
+		}
 
-        if (bukkitWorld != null) this.bukkitWorld.setAutoSave(false);
+		this.bukkitWorld = Bukkit.createWorld(
+				new WorldCreator(activeWorldFolder.getName())
+		);
 
-        if (isLoaded())
-        {
-            rushCmd.update(bukkitWorld);
-            return true;
-        }
-        return isLoaded();
-    }
+		if (bukkitWorld != null) this.bukkitWorld.setAutoSave(false);
 
-    public boolean isLoaded()
-    {
-        return bukkitWorld != null;
-    }
+		if (isLoaded()) {
+			RushCommand.update(bukkitWorld);
+			return true;
+		}
+		return isLoaded();
+	}
 
-    public void unload()
-    {
-        if (bukkitWorld != null) Bukkit.unloadWorld(bukkitWorld, false);
-        if (activeWorldFolder != null) activeWorldFolder.delete();
+	public boolean isLoaded() {
+		return bukkitWorld != null;
+	}
 
-        bukkitWorld = null;
-        activeWorldFolder = null;
-    }
+	public void unload() {
+		if (bukkitWorld != null) Bukkit.unloadWorld(bukkitWorld, false);
+		if (activeWorldFolder != null) activeWorldFolder.delete();
 
-    public boolean restoreFromSource()
-    {
-        unload();
-        return load();
-    }
+		bukkitWorld = null;
+		activeWorldFolder = null;
+	}
 
-    public static void delete(File file)
-    {
-        if (file.isDirectory())
-        {
-            File[] files = file.listFiles();
-            if (files == null) return;
-            for (File child : files)
-            {
-                delete(child);
-            }
-        }
-        file.delete();
-    }
+	public boolean restoreFromSource() {
+		unload();
+		return load();
+	}
+
+	public static void delete(File file) {
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			if (files == null) return;
+			for (File child : files) {
+				delete(child);
+			}
+		}
+		file.delete();
+	}
 
 }
