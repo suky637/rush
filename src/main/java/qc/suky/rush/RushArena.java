@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
-import qc.suky.rush.command.RushCommand;
+import qc.suky.rush.event.ArenaUnloadEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +43,14 @@ public class RushArena {
 		}
 	}
 
+	public World getBukkitWorld() {
+		if (!isLoaded()) {
+			plugin.getLogger().warning("Attempting to get Bukkit World from unloaded Rush Arena");
+			// Let's still try if it works...
+		}
+		return bukkitWorld;
+	}
+
 	public boolean load() {
 		if (isLoaded()) return true;
 
@@ -70,7 +78,7 @@ public class RushArena {
 		if (bukkitWorld != null) this.bukkitWorld.setAutoSave(false);
 
 		if (isLoaded()) {
-			RushCommand.update(bukkitWorld);
+			// update(bukkitWorld);
 			return true;
 		}
 		return isLoaded();
@@ -81,6 +89,10 @@ public class RushArena {
 	}
 
 	public void unload() {
+		ArenaUnloadEvent event = new ArenaUnloadEvent(this);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) return;
+
 		if (bukkitWorld != null) Bukkit.unloadWorld(bukkitWorld, false);
 		if (activeWorldFolder != null) activeWorldFolder.delete();
 
