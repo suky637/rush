@@ -1,9 +1,11 @@
 package qc.suky.rush;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import qc.suky.rush.event.ArenaUnloadEvent;
 
 import java.io.File;
@@ -23,6 +25,9 @@ public class RushArena {
 
 	private World bukkitWorld;
 	private final Rush plugin;
+
+	@Getter
+	private final List<Player> players = new ArrayList<>();
 
 	public RushArena(File worldFolder, String worldName, boolean loadOnInit, Rush plugin) {
 		this.sourceWorldFolder = new File(
