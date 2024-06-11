@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
-import qc.suky.rush.command.RushCommand;
+import qc.suky.rush.event.ArenaUnloadEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,6 +89,10 @@ public class RushArena {
 	}
 
 	public void unload() {
+		ArenaUnloadEvent event = new ArenaUnloadEvent(this);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		if (event.isCancelled()) return;
+
 		if (bukkitWorld != null) Bukkit.unloadWorld(bukkitWorld, false);
 		if (activeWorldFolder != null) activeWorldFolder.delete();
 

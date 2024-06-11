@@ -2,6 +2,7 @@ package qc.suky.rush;
 
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import qc.suky.rush.command.RushAdminCommand;
 import qc.suky.rush.command.RushCommand;
@@ -29,7 +30,7 @@ public final class Rush extends JavaPlugin {
 		arena = new RushArena(gameMapsFolder, "rush", true, this);
 
 		commandManager.registerCommand(new RushCommand(this));
-		commandManager.registerCommand(new RushAdminCommand());
+		commandManager.registerCommand(new RushAdminCommand(this));
 		getLogger().info("Plugin has been enabled.");
 	}
 
