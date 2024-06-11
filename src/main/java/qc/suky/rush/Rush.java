@@ -8,13 +8,11 @@ import java.io.File;
 import java.util.Objects;
 
 public final class Rush extends JavaPlugin {
-	public Rush plugin;
 	private RushArena arena; // rn only implementing for 1 arena, TODO: adding multiple arenas
 
 	@Override
 	public void onEnable() {
 		// Plugin startup logic
-		plugin = this;
 		getDataFolder().mkdirs();
 
 		File gameMapsFolder = new File(getDataFolder(), "gameMaps");
@@ -34,14 +32,9 @@ public final class Rush extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// Plugin shutdown logic
-		plugin = null;
 		if (arena != null)
 			arena.unload();
 		getLogger().info("Plugin has been disabled.");
-	}
-
-	public Rush getPlugin() {
-		return plugin;
 	}
 
 }
