@@ -2,10 +2,3 @@ name: rush
 version: '${project.version}'
 main: qc.suky.rush.Rush
 api-version: '1.20'
-commands:
-  rush:
-    description: 'command for the rush plugin'
-    permission: rush.use
-  rush-admin:
-    description: 'Admin command for the rush plugin'
-    permission: rush.admin.use

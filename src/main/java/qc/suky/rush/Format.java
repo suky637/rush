@@ -15,6 +15,17 @@ public class Format {
 		return MiniMessage.miniMessage().deserialize(arg);
 	}
 
+	/**
+	 * Format a string with MiniMessage
+	 * <h4>Experimental</h5> no idea what arg.formatted(objects) does, but it seems to work
+	 * @param arg The string to format
+	 * @param objects The objects to format
+	 * @return The formatted string as a Component
+	 */
+	public static Component format(String arg, Object... objects) {
+		return MiniMessage.miniMessage().deserialize(arg.formatted(objects));
+	}
+
     /**
 	 * Read this:
      * <a href="https://docs.advntr.dev/faq.html#how-can-i-support-both-minimessage-and-legacy-code-formatting">How can I support both MiniMessage and legacy (§-code) formatting?</a>
