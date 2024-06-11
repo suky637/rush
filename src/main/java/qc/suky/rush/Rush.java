@@ -23,7 +23,8 @@ public final class Rush extends JavaPlugin {
         arena = new RushArena(gameMapsFolder, "rush", true);
 
 
-
+        getCommand("rush").setExecutor(new rushCmd());
+        getCommand("rush-admin").setExecutor(new RushAdmin());
 
         System.out.println("RUSH Plugin has been enabled.");
     }
@@ -32,5 +33,7 @@ public final class Rush extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         System.out.println("RUSH Plugin has been disabled.");
+        if (arena != null)
+            arena.unload();
     }
 }

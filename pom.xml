@@ -6,7 +6,7 @@
 
   <groupId>qc.suky</groupId>
   <artifactId>rush</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-INDEV</version>
   <packaging>jar</packaging>
 
   <name>rush</name>

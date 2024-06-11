@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.codehaus.plexus.util.FileUtils.copyDirectory;
+import static org.codehaus.plexus.util.FileUtils.copyFile;
+
 public class RushArena {
     public RushArenaState status;
     public List<Block> blocks = new ArrayList<>();
@@ -32,6 +35,14 @@ public class RushArena {
         if (loadOnInit) load();
     }
 
+    public static void copyDirectoryCompatibityMode(File source, File destination) throws IOException {
+        if (source.isDirectory()) {
+            copyDirectory(source, destination);
+        } else {
+            copyFile(source, destination);
+        }
+    }
+
     public boolean load() {
         if (isLoaded()) return true;
 
@@ -41,7 +52,12 @@ public class RushArena {
         );
 
         try {
-            FileUtil.copy(sourceWorldFolder, activeWorldFolder);
+            if (!activeWorldFolder.exists())
+                activeWorldFolder.mkdir();
+            for (String f : sourceWorldFolder.list())
+            {
+                copyDirectoryCompatibityMode(new File(sourceWorldFolder, f), new File(activeWorldFolder, f));
+            }
         } catch (Exception e) {
             Bukkit.getLogger().severe("Failed to load Rush Map from source folder " + sourceWorldFolder);
             e.printStackTrace();
@@ -53,6 +69,12 @@ public class RushArena {
         );
 
         if (bukkitWorld != null) this.bukkitWorld.setAutoSave(false);
+
+        if (isLoaded())
+        {
+            rushCmd.update(bukkitWorld);
+            return true;
+        }
         return isLoaded();
     }
 
