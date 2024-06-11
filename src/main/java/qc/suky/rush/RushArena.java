@@ -2,6 +2,7 @@ package qc.suky.rush;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.codehaus.plexus.util.FileUtils.copyDirectory;
 import static org.codehaus.plexus.util.FileUtils.copyFile;
@@ -119,6 +121,18 @@ public class RushArena {
 			}
 		}
 		file.delete();
+	}
+
+	public void addPlayer(Player player) {
+		Location loc = new Location(getBukkitWorld(), 0, 65, 0);
+		player.teleport(loc);
+		players.add(player);
+	}
+
+	public void removePlayer(Player player) {
+		players.remove(player);
+		World to = Bukkit.getWorld(Objects.requireNonNull(plugin.getConfig().getString("spawn_world")));
+		player.teleport(to.getSpawnLocation());
 	}
 
 }
