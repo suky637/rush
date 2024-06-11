@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import qc.suky.rush.Rush;
+import qc.suky.rush.RushArena;
 
 @AllArgsConstructor
 public class AppendPlayerAmount implements Listener {
@@ -16,10 +17,12 @@ public class AppendPlayerAmount implements Listener {
 		World before = event.getFrom();
 		World after = event.getPlayer().getWorld();
 
-		if (plugin.getArena().getBukkitWorld() == after) {
-			plugin.getArena().getPlayers().add(event.getPlayer());
-		} else if (plugin.getArena().getBukkitWorld() == before) {
-			plugin.getArena().getPlayers().remove(event.getPlayer());
+		for (RushArena arena : plugin.getArenas()) {
+			if (arena.getBukkitWorld() == after) {
+				arena.getPlayers().add(event.getPlayer());
+			} else if (arena.getBukkitWorld() == before) {
+				arena.getPlayers().remove(event.getPlayer());
+			}
 		}
 
 	}
