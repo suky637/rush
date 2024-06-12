@@ -5,6 +5,8 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
+import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
+import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,9 +16,10 @@ import qc.suky.rush.Format;
 import qc.suky.rush.Rush;
 import qc.suky.rush.RushArena;
 import qc.suky.rush.RushArenaState;
+import qc.suky.rush.util.GuiHelper;
 
-import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 @CommandAlias("rush")
 @AllArgsConstructor
@@ -44,37 +47,46 @@ public class RushCommand extends BaseCommand {
 				return;
 			}
 		}
-
-		RushArena ra = new RushArena(new File(plugin.getDataFolder(), "gameMaps"), "rush", true, plugin);
-		World world = ra.getBukkitWorld();
-		Location location = new Location(world, 0, 65, 0);
-		player.teleport(location);
-		player.sendMessage(Format.format("<green>Teleporting to the arena...</green>"));
-		plugin.getArenas().add(ra);
 	}
 
 	@Subcommand("join")
 	@CommandPermission("rush.use")
-	public void onJoin(Player player)
-	{
+	public void onJoin(Player player) {
 		List<RushArena> arenas = plugin.getArenas();
-		for (RushArena arena : arenas) {
-			if (arena.status == RushArenaState.RUNNING || arena.status == RushArenaState.FINISHED)
-				continue;
-			if (arena.getBukkitWorld().getName().equalsIgnoreCase(name)) {
-				World world = arena.getBukkitWorld();
-				Location location = new Location(world, 0, 65, 0);
-				player.teleport(location);
-				player.sendMessage(Format.format("<green>Teleporting to the arena...</green>"));
-				return;
-			}
+		Random random = new Random();
+
+		if (arenas.isEmpty()) {
+			player.sendMessage(Format.format("<red>No arenas available to join.</red>"));
+			return;
 		}
 
-		RushArena ra = new RushArena(new File(plugin.getDataFolder(), "gameMaps"), "rush", true, plugin);
-		World world = ra.getBukkitWorld();
-		Location location = new Location(world, 0, 65, 0);
-		player.teleport(location);
-		player.sendMessage(Format.format("<green>Teleporting to the arena...</green>"));
-		plugin.getArenas().add(ra);
+		int randomIndex = random.nextInt(arenas.size());
+		RushArena randomArena = arenas.get(randomIndex);
+
+		if (randomArena.status == RushArenaState.RUNNING || randomArena.status == RushArenaState.FINISHED) {
+			player.sendMessage(Format.format("<red>The selected arena is not available to join.</red>"));
+			return;
+		}
+
+		randomArena.addPlayer(player);
+		player.sendMessage(Format.format("<green>Joined the arena " + randomArena.getBukkitWorld().getName() + "</green>"));
 	}
+
+	@Subcommand("menu")
+	@CommandPermission("rush.use")
+	public void onMenu(Player player) {
+		ChestGui gui = new ChestGui(6, "Rush");
+		gui.setOnGlobalClick(event -> event.setCancelled(true));
+		GuiHelper.addOuter(gui);
+
+		OutlinePane effectPane = new OutlinePane(1, 1, 8, 5);
+
+		for(RushArena arena : plugin.getArenas()) {
+			effectPane.addItem(GuiHelper.createGuiItem(arena));
+		}
+
+		gui.show(player);
+	}
+
+
 }
