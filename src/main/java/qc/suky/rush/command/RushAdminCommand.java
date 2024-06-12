@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import qc.suky.rush.Format;
 import qc.suky.rush.Rush;
 import qc.suky.rush.RushArena;
+import qc.suky.rush.objects.ArenaSpawner;
+import qc.suky.rush.objects.ArenaSpawnerType;
 import qc.suky.rush.objects.ArenaTeam;
 
 import javax.annotation.Nullable;
@@ -130,25 +132,42 @@ public class RushAdminCommand extends BaseCommand {
 	@Subcommand("setTeamSpawn")
 	@CommandPermission("rush.admin")
 	private void onArenaSetTeamSpawn(Player player, String team) {
-		Location location = player.getLocation();
+
+		 ArenaTeam crntTeam = getTeamByName(team);
+		 if (crntTeam == null)
+		 {
+			 player.sendMessage(Format.format("<red>The Team Name isn't valid."));
+		 	return;
+		 }
+		 crntTeam.setSpawn(player.getLocation());
+		 player.sendMessage(Format.format("<green>Set Team Spawn."));
 	}
 
 	@Subcommand("addSpanwer bronze")
 	@CommandPermission("rush.admin")
 	private void onArenaAddBronzeSpawner(Player player) {
+		if (currentArena == null)
+			return;
 		Location location = player.getLocation();
+		currentArena.spawners.add(new ArenaSpawner(currentArena, ArenaSpawnerType.BRONZE, player.getX(), player.getY(), player.getZ()));
 	}
 
 	@Subcommand("addSpanwer silver")
 	@CommandPermission("rush.admin")
 	private void onArenaAddSilverSpawner(Player player) {
+		if (currentArena == null)
+			return;
 		Location location = player.getLocation();
+		currentArena.spawners.add(new ArenaSpawner(currentArena, ArenaSpawnerType.SILVER, player.getX(), player.getY(), player.getZ()));
 	}
 
 	@Subcommand("addSpanwer gold")
 	@CommandPermission("rush.admin")
 	private void onArenaAddGoldSpawner(Player player) {
+		if (currentArena == null)
+			return;
 		Location location = player.getLocation();
+		currentArena.spawners.add(new ArenaSpawner(currentArena, ArenaSpawnerType.GOLD, player.getX(), player.getY(), player.getZ()));
 	}
 
 }
