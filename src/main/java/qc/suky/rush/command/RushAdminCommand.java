@@ -105,7 +105,11 @@ public class RushAdminCommand extends BaseCommand {
 			return;
 		}
 
-		team.setColor(Color.fromRGB(Integer.parseInt(color, 16)));
+		if (color.startsWith("#")) {
+			color = color.substring(1);
+		}
+		int colourValue = Integer.parseInt(color, 16);
+		team.setColor(Color.fromRGB(colourValue));
 		player.sendMessage(Format.format("<green>Set color for team "+ teamName +" <color:"+color+">'"+ color +"'"));
 	}
 
@@ -114,7 +118,7 @@ public class RushAdminCommand extends BaseCommand {
 	private void onArenaAddTeam(Player player, String name) {
 		if (currentArena == null)
 			player.sendMessage(Format.format("<red>Please select an arena by doing \"/rush-admin edit <World Name>\""));
-		int colourValue = Integer.parseInt("#FFFFFF", 16);
+		int colourValue = Integer.parseInt("FF0000", 16);
 		ArenaTeam team = new ArenaTeam();
 		team.setColor(Color.fromRGB(colourValue));
 		team.setTeamName(name);
