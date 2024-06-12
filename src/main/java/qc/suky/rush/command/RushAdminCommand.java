@@ -36,45 +36,38 @@ public class RushAdminCommand extends BaseCommand {
 
 	@Subcommand("setLobby")
 	@CommandPermission("rush.admin")
-	private void onArenaSetLobby(CommandSender sender) {
-		if (!(sender instanceof Player plr))
-			return;
-        plugin.lobbyPosition = new Location(null, plr.getX(), plr.getY(), plr.getZ());
+	private void onArenaSetLobby(Player player) {
+		plugin.lobbyPosition = new Location(null, player.getX(), player.getY(), player.getZ());
 	}
 
 	@Subcommand("addTeam")
 	@CommandPermission("rush.admin")
-	private void onArenaAddTeam(CommandSender sender)
-	{
+	private void onArenaAddTeam(Player sender, String name, String colour) {
 		// "/rush-admin addTeam <teamname> <teamcolour>
 	}
 
 	@Subcommand("setTeamSpawn")
 	@CommandPermission("rush.admin")
-	private void onArenaSetTeamSpawn(CommandSender sender)
-	{
-
+	private void onArenaSetTeamSpawn(Player player, String team) {
+		Location location = player.getLocation();
 	}
 
-	@Subcommand("addBronzeSpawner")
+	@Subcommand("addSpanwer bronze")
 	@CommandPermission("rush.admin")
-	private void onArenaAddBronzeSpawner(CommandSender sender)
-	{
-
+	private void onArenaAddBronzeSpawner(Player player) {
+		Location location = player.getLocation();
 	}
 
-	@Subcommand("addSilverSpawner")
+	@Subcommand("addSpanwer silver")
 	@CommandPermission("rush.admin")
-	private void onArenaAddSilverSpawner(CommandSender sender)
-	{
-
+	private void onArenaAddSilverSpawner(Player player) {
+		Location location = player.getLocation();
 	}
 
-	@Subcommand("addGoldSpawner")
+	@Subcommand("addSpanwer gold")
 	@CommandPermission("rush.admin")
-	private void onArenaAddGoldSpawner(CommandSender sender)
-	{
-
+	private void onArenaAddGoldSpawner(Player player) {
+		Location location = player.getLocation();
 	}
 
 }

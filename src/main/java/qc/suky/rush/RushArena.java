@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import qc.suky.rush.event.ArenaUnloadEvent;
 
@@ -125,6 +124,7 @@ public class RushArena {
 	}
 
 	public void addPlayer(Player player) {
+		if(!isLoaded()) load();
 		Location loc = new Location(getBukkitWorld(), 0, 65, 0);
 		player.teleport(loc);
 		players.add(player);

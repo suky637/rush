@@ -39,6 +39,9 @@ public final class Rush extends JavaPlugin {
 		File gameMapsFolder = new File(getDataFolder(), "gameMaps");
 		if (!gameMapsFolder.exists()) {
 			gameMapsFolder.mkdirs();
+			for (File file : gameMapsFolder.listFiles()) {
+				arenas.add(new RushArena(gameMapsFolder, file.getName(), false, this));
+			}
 		}
 
 		getServer().getPluginManager().registerEvents(new HandleArena(this), this);
