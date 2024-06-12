@@ -20,7 +20,6 @@ import static org.codehaus.plexus.util.FileUtils.copyFile;
 
 public class RushArena {
 	public RushArenaState status;
-	public List<Block> blocks = new ArrayList<>();
 
 	private final File sourceWorldFolder;
 	private File activeWorldFolder;

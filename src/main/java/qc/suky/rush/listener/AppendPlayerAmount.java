@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import qc.suky.rush.Rush;
 import qc.suky.rush.RushArena;
+import qc.suky.rush.RushArenaState;
 
 @AllArgsConstructor
 public class AppendPlayerAmount implements Listener {
@@ -22,6 +23,11 @@ public class AppendPlayerAmount implements Listener {
 				arena.getPlayers().add(event.getPlayer());
 			} else if (arena.getBukkitWorld() == before) {
 				arena.getPlayers().remove(event.getPlayer());
+				if (arena.getPlayers().isEmpty() || arena.status == RushArenaState.FINISHED)
+				{
+					arena.unload();
+					plugin.getArenas().remove(arena);
+				}
 			}
 		}
 
