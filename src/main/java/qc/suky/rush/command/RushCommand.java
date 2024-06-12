@@ -39,12 +39,8 @@ public class RushCommand extends BaseCommand {
 		for (RushArena arena : arenas) {
 			if (arena.status == RushArenaState.RUNNING || arena.status == RushArenaState.FINISHED)
 				continue;
-			if (arena.getBukkitWorld().getName().equalsIgnoreCase(name)) {
-				World world = arena.getBukkitWorld();
-				Location location = new Location(world, 0, 65, 0);
-				player.teleport(location);
-				player.sendMessage(Format.format("<green>Teleporting to the arena...</green>"));
-				return;
+			if (arena.getName().equalsIgnoreCase(name)) {
+				arena.addPlayer(player);
 			}
 		}
 	}
@@ -82,8 +78,11 @@ public class RushCommand extends BaseCommand {
 		OutlinePane effectPane = new OutlinePane(1, 1, 8, 5);
 
 		for(RushArena arena : plugin.getArenas()) {
+
 			effectPane.addItem(GuiHelper.createGuiItem(arena));
 		}
+
+		gui.addPane(effectPane);
 
 		gui.show(player);
 	}

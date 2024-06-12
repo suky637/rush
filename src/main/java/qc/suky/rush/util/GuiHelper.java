@@ -38,7 +38,7 @@ public class GuiHelper {
 	public static GuiItem createGuiItem(RushArena arena) {
 		ItemStack item = new ItemStack(Material.GRASS_BLOCK, 1);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(arena.getBukkitWorld().getName());
+		meta.setDisplayName(arena.getName());
 		item.setItemMeta(meta);
 		return new GuiItem(item, event -> {
 			arena.addPlayer((Player) event.getWhoClicked());

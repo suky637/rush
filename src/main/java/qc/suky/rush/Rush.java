@@ -23,10 +23,6 @@ public final class Rush extends JavaPlugin {
 
 	private PaperCommandManager commandManager;
 
-	public final List<ArenaTeam> teams = new ArrayList<>();
-	public final List<ArenaSpawner> spawners = new ArrayList<>();
-	public Location lobbyPosition;
-
 
 	@Override
 	public void onEnable() {
@@ -37,12 +33,13 @@ public final class Rush extends JavaPlugin {
 		saveDefaultConfig();
 
 		File gameMapsFolder = new File(getDataFolder(), "gameMaps");
-		if (!gameMapsFolder.exists()) {
-			gameMapsFolder.mkdirs();
-			for (File file : gameMapsFolder.listFiles()) {
-				arenas.add(new RushArena(gameMapsFolder, file.getName(), false, this));
-			}
+		getLogger().info("&eLoading Maps...");
+		gameMapsFolder.mkdirs();
+		for (File file : gameMapsFolder.listFiles()) {
+				getLogger().info("&eCreating an arena");
+				arenas.add(new RushArena(gameMapsFolder, file.getName(), true, this));
 		}
+		getLogger().info("&eFinished Loading Maps");
 
 		getServer().getPluginManager().registerEvents(new HandleArena(this), this);
 		getServer().getPluginManager().registerEvents(new AppendPlayerAmount(this), this);
@@ -56,8 +53,7 @@ public final class Rush extends JavaPlugin {
 	public void onDisable() {
 		// Plugin shutdown logic
 		for (RushArena arena : arenas) {
-			if (arena != null)
-				arena.unload();
+			arena.forceUnload();
 		}
 
 		getLogger().info("Plugin has been disabled.");

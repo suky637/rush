@@ -6,7 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
+import org.bukkit.util.FileUtil;
 import qc.suky.rush.event.ArenaUnloadEvent;
+import qc.suky.rush.objects.ArenaSpawner;
+import qc.suky.rush.objects.ArenaTeam;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +29,12 @@ public class RushArena {
 	private World bukkitWorld;
 	private final Rush plugin;
 
+	public final List<ArenaTeam> teams = new ArrayList<>();
+	public final List<ArenaSpawner> spawners = new ArrayList<>();
+	public Location lobbyPosition;
 
+	@Getter
+	private String name;
 
 	@Getter
 	private final List<Player> players = new ArrayList<>();
@@ -38,6 +46,9 @@ public class RushArena {
 		);
 
 		this.plugin = plugin;
+
+		name = worldName;
+
 
 		if (loadOnInit) load();
 	}
@@ -82,12 +93,16 @@ public class RushArena {
 				new WorldCreator(activeWorldFolder.getName())
 		);
 
-		if (bukkitWorld != null) this.bukkitWorld.setAutoSave(false);
+		if (bukkitWorld != null)  {
+			this.bukkitWorld.setAutoSave(false);
+			lobbyPosition = new Location(bukkitWorld, 0, 80, 0);
+		}
 
 		if (isLoaded()) {
 			// update(bukkitWorld);
 			return true;
 		}
+
 		return isLoaded();
 	}
 
@@ -102,6 +117,27 @@ public class RushArena {
 
 		if (bukkitWorld != null) Bukkit.unloadWorld(bukkitWorld, false);
 		if (activeWorldFolder != null) activeWorldFolder.delete();
+
+		bukkitWorld = null;
+		activeWorldFolder = null;
+	}
+
+
+	/*
+	Dangerous Function
+	USE unload() WHEN YOU CAN, ONLY USE THIS FUNCTION IF IT FAILS.
+	Reason: it has no check for nulls.
+	*/
+	public void forceUnload()
+	{
+		Bukkit.unloadWorld(bukkitWorld, false);
+
+		if (!(activeWorldFolder.delete()))
+		{
+			plugin.getLogger().severe("Couldn't delete the active world folder.");
+		}
+
+		activeWorldFolder.deleteOnExit();
 
 		bukkitWorld = null;
 		activeWorldFolder = null;
@@ -123,11 +159,27 @@ public class RushArena {
 		file.delete();
 	}
 
+	public void start()
+	{
+		status = RushArenaState.RUNNING;
+		int teamSize = teams.size();
+		if (teamSize == 0)
+		{
+			Bukkit.broadcast(Format.format("<red>No teams were created, do /rush-admin addTeam <teamName> <hexColour>"));
+			return;
+		}
+		int index = 0;
+	}
+
 	public void addPlayer(Player player) {
 		if(!isLoaded()) load();
-		Location loc = new Location(getBukkitWorld(), 0, 65, 0);
+		Location loc = lobbyPosition;
 		player.teleport(loc);
 		players.add(player);
+		if (players.size() >= 4)
+		{
+			start();
+		}
 	}
 
 	public void removePlayer(Player player) {
