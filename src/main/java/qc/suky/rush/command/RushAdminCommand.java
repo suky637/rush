@@ -110,7 +110,7 @@ public class RushAdminCommand extends BaseCommand {
 		}
 		int colourValue = Integer.parseInt(color, 16);
 		team.setColor(Color.fromRGB(colourValue));
-		player.sendMessage(Format.format("<green>Set color for team "+ teamName +" <color:"+color+">'"+ color +"'"));
+		player.sendMessage(Format.format("<color:#" + color + ">Set color for team "+ teamName));
 	}
 
 	@Subcommand("addTeam")
