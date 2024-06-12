@@ -5,8 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
-import io.papermc.paper.math.BlockPosition;
-import lombok.AllArgsConstructor;
+import net.william278.husktowns.menu.ColorPicker;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -69,19 +68,59 @@ public class RushAdminCommand extends BaseCommand {
 		if (currentArena == null)
 			player.sendMessage(Format.format("<red>Please select an arena by doing \"/rush-admin edit <World Name>\""));
 		currentArena.lobbyPosition = new Location(player.getWorld(), player.getX(), player.getY(), player.getZ());
-		player.sendMessage(Format.format("<green>Set Lobby Position to X: " + String.valueOf(player.getX()) + "; Y: " + String.valueOf(player.getY()) + "; Z: " + String.valueOf(player.getZ()) + "."));
+		player.sendMessage(Format.format("<green>Set Lobby Position to X: " + player.getX() + "; Y: " + player.getY() + "; Z: " + player.getZ() + "."));
+	}
+
+	private ArenaTeam getTeamByName(String teamName) {
+		for (ArenaTeam team : currentArena.teams) {
+			if (team.getTeamName().equals(teamName)) {
+				return team;
+			}
+		}
+		return null;
+	}
+
+	@Subcommand("color")
+	private void onArenaAddTeamColorPicker(Player player, String teamName) {
+		if (currentArena == null)
+			player.sendMessage(Format.format("<red>Please select an arena by doing \"/rush-admin edit <World Name>\""));
+
+		ArenaTeam team = getTeamByName(teamName);
+		if (team == null) {
+			player.sendMessage(Format.format("<red>Team with name '" + teamName + "' does not exist."));
+			return;
+		}
+
+		player.sendMessage(ColorPicker.builder().command("/rush:rush-admin color " + teamName).build().toComponent());
+	}
+
+	@Subcommand("color")
+	private void onArenaAddTeamColorPicker(Player player, String teamName, String color) {
+		if (currentArena == null)
+			player.sendMessage(Format.format("<red>Please select an arena by doing \"/rush-admin edit <World Name>\""));
+
+		ArenaTeam team = getTeamByName(teamName);
+		if (team == null) {
+			player.sendMessage(Format.format("<red>Team with name '" + teamName + "' does not exist."));
+			return;
+		}
+
+		team.setColor(Color.fromRGB(Integer.parseInt(color, 16)));
+		player.sendMessage(Format.format("<green>Set color for team "+ teamName +" <color:"+color+">'"+ color +"'"));
 	}
 
 	@Subcommand("addTeam")
 	@CommandPermission("rush.admin")
-	private void onArenaAddTeam(Player player, String name, String colourRGB) {
+	private void onArenaAddTeam(Player player, String name) {
 		if (currentArena == null)
 			player.sendMessage(Format.format("<red>Please select an arena by doing \"/rush-admin edit <World Name>\""));
-		int colourValue = Integer.parseInt(colourRGB, 16);
+		int colourValue = Integer.parseInt("#FFFFFF", 16);
 		ArenaTeam team = new ArenaTeam();
 		team.setColor(Color.fromRGB(colourValue));
 		team.setTeamName(name);
-		player.sendMessage(Format.format("<green>Added Team <color:#" + colourRGB + ">'" + team.getTeamName() + "'"));
+		currentArena.teams.add(team);
+		player.sendMessage(Format.format("<green>Added Team <white>'" + team.getTeamName() + "'"));
+		player.sendMessage(Format.format("<green>Use <white>/rush-admin color <teamName> <color> <green>to set the team color."));
 	}
 
 	@Subcommand("setTeamSpawn")
