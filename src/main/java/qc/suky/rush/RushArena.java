@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.FileUtil;
 import qc.suky.rush.event.ArenaUnloadEvent;
@@ -48,6 +49,7 @@ public class RushArena {
 		this.plugin = plugin;
 
 		name = worldName;
+
 
 
 		if (loadOnInit) load();

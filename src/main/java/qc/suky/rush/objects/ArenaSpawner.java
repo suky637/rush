@@ -3,6 +3,7 @@ package qc.suky.rush.objects;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import qc.suky.rush.Rush;
 import qc.suky.rush.RushArena;
 
 public class ArenaSpawner {
@@ -17,6 +18,8 @@ public class ArenaSpawner {
         this.arena = arena;
         this.location = new Location(arena.getBukkitWorld(), x, y, z);
         this.type = type;
+
+
     }
 
     public void SpawnItem()
