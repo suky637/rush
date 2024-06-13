@@ -98,6 +98,11 @@
             <version>0.10.14</version>
         </dependency>
         <dependency>
+            <groupId>de.exlll</groupId>
+            <artifactId>configlib-paper</artifactId>
+            <version>4.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.1-SNAPSHOT</version>
