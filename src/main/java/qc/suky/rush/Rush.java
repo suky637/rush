@@ -1,14 +1,8 @@
 package qc.suky.rush;
 
 import co.aikar.commands.PaperCommandManager;
-import de.exlll.configlib.NameFormatters;
-import de.exlll.configlib.YamlConfigurationProperties;
-import de.exlll.configlib.YamlConfigurations;
 import lombok.Getter;
-import lombok.Setter;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import qc.suky.rush.command.RushAdminCommand;
 import qc.suky.rush.command.RushCommand;
@@ -17,7 +11,6 @@ import qc.suky.rush.listener.HandleArena;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,17 +22,6 @@ public final class Rush extends JavaPlugin {
 	public static Rush instance;
 
 	private PaperCommandManager commandManager;
-
-	@NotNull
-	YamlConfigurationProperties.Builder<?> YAML_CONFIGURATION_PROPERTIES = YamlConfigurationProperties.newBuilder()
-			.charset(StandardCharsets.UTF_8)
-			.setNameFormatter(NameFormatters.LOWER_UNDERSCORE);
-
-
-
-	//@Setter
-	//@Getter
-	//private Settings settings;
 
 	JSONObject config;
 
@@ -67,11 +49,13 @@ public final class Rush extends JavaPlugin {
 	public void onEnable() {
 		// Plugin startup logic
 		commandManager = new PaperCommandManager(this);
-
 		instance = this;
 
 		// TODO: Testing if the file doesn't exist, if it does, create one with default values.
 		config = new JSONObject(readFile(getDataFolder().toPath().toAbsolutePath() + "/config.json"));
+
+		getConfig().options().copyDefaults(true);
+		saveDefaultConfig();
 
 		File gameMapsFolder = new File(getDataFolder(), "gameMaps");
 		getLogger().info("&eLoading Maps...");
